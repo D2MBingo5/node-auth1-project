@@ -43,6 +43,8 @@ server.use(session({
   }),
 }))
 
+// routing get set up on this line
+
 server.get("/", (req, res) => {
   res.json({ api: "up" });
 });
