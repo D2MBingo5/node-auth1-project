@@ -22,28 +22,28 @@ const store = require('connect-session-knex')(session)
 
 const server = express();
 
-server.use(helmet());
-server.use(express.json());
-server.use(cors());
-
 server.use(session({
   name: 'chocolatechip',
   secret: 'noone', // this belongs in the environment
   cookie: {
     maxAge: 1 * 24 * 60 * 60 * 1000,
     secure: false, // in dev, this should be true
+    httpOnly: true,
   },
-  httpOnly: true,
   resave: false,
   saveUninitialized: false,
   store: new store({
     knex: require('../data/db-config'),
     tablename: 'sessions',
     sidfieldname: 'sid',
-    createtable: true,
+    createTable: true,
     clearInterval: 1000 * 60 * 60,
   }),
 }))
+
+server.use(helmet());
+server.use(express.json());
+server.use(cors());
 
 server.use('/api/users', usersRouter)
 server.use('/api/auth', authRouter)
